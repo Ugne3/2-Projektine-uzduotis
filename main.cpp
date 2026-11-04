@@ -4,266 +4,217 @@
 
 using namespace std;
 
-string vardai[100];
-int pazymiai[100][10];
-int pazymiuKiekis[100];
-int mokiniuKiekis = 0;
 
-int ivestiPazymi()
-{
-    int p;
+int main() {
+    system("chcp 65001 > nul");
 
-    do
-    {
-        cout << "Iveskite pazymi nuo 1 iki 10: ";
-        cin >> p;
+    const int max_mokiniai = 100;
+    const int max_pazymiai = 10;
 
-        if (p < 1 || p > 10)
-        {
-            cout << "Neteisingas pazymys. Bandykite dar karta." << endl;
-        }
-    }
-    while (p < 1 || p > 10);
-    return p;
-}
+    string vardai[max_mokiniai];
+    int pazymiai[max_mokiniai][max_pazymiai];
+    int pazymiuSkaicius[max_mokiniai] = {0}; //kiek kiekvienas turi pazimiu.
+    int mokiniuSkaicius = 0; // koks dabar mokiniu skaicius.
 
-int pasirinktiMokini()
-{
-    if (mokiniuKiekis == 0)
-    {
-        cout << "Mokiniu sarasas tuscias." << endl;
-        return -1;
-    }
-
-    cout << "Mokiniai:" << endl;
-
-    for (int i = 0; i < mokiniuKiekis; i++)
-    {
-        cout << i + 1 << ". " << vardai[i] << endl;
-    }
-
-    int n;
-    cout << "Pasirinkite mokinio numeri: ";
-    cin >> n;
-
-    if (n < 1 || n > mokiniuKiekis)
-    {
-        cout << "Neteisingas numeris. Galima rinktis nuo 1 iki "
-             << mokiniuKiekis << "." << endl;
-        return -1;
-    }
-
-    return n - 1;
-}
-
-int main()
-{
     int pasirinkimas;
-
-    do
-    {
-        cout << endl;
-        cout << "Mokiniu pazymiu sistema" << endl;
-        cout << "1. Ivesti mokini ir jo pazymius" << endl;
-        cout << "2. Perziureti visu mokiniu pazymius" << endl;
-        cout << "3. Perziureti konkretaus mokinio pazymius" << endl;
-        cout << "4. Atnaujinti pazymi" << endl;
-        cout << "5. Apskaiciuoti mokinio vidurki" << endl;
-        cout << "6. Pasalinti mokini" << endl;
-        cout << "7. Iseiti" << endl;
-        cout << "Pasirinkite veiksma: ";
+    do {
+        cout << endl << "Mokiniu pazymiu sistema" << endl;
+        cout << "1. Įvesti mokinį ir jo pažymius" << endl;
+        cout << "2. Peržiūrėti visų mokinių pažymius" << endl;
+        cout << "3. Peržiūrėti konkretaus mokinio pažymius" << endl;
+        cout << "4. Atnaujinti pažymį" << endl;
+        cout << "5. Apskaičiuoti mokinio vidurkį" << endl;
+        cout << "6. Pašalinti mokinį" << endl;
+        cout << "7. Išeiti" << endl;
+        cout << "Pasirinkite veiksmą (1-7): ";
         cin >> pasirinkimas;
 
-        if (pasirinkimas == 1)
-        {
-            if (mokiniuKiekis >= 100)
-            {
-                cout << "Mokiniu sarasas pilnas." << endl;
-            }
-                else
-            {
-                cout << "Iveskite mokinio varda: ";
-                cin >> vardai[mokiniuKiekis];
+        if (pasirinkimas == 1) {
+            // 1. Įvesti mokinį ir jo pažymius
+            if (mokiniuSkaicius >= max_mokiniai) {
+                cout << "Klaida. Maksimalus mokinių kiekis 100." << endl;
+            } else {
+                cout << "Įveskite mokinio vardą: ";
+                cin >> vardai[mokiniuSkaicius];
 
-                do
-                {
-                    cout << "Kiek pazymiu norite ivesti (0-10)? ";
-                    cin >> pazymiuKiekis[mokiniuKiekis];
+                int kiek;
+                cout << "Kiek pažymių norite įvesti šiam mokiniui (nuo 1 iki 10)? ";
+                cin >> kiek;
 
-                    if (pazymiuKiekis[mokiniuKiekis] < 0 ||
-                        pazymiuKiekis[mokiniuKiekis] > 10)
-                    {
-                        cout << "Galima ivesti nuo 0 iki 10 pazymiu." << endl;
+                while (kiek < 1 || kiek > max_pazymiai) {
+                    cout << "Neteisingai. Įveskite skaičių nuo 1 iki 10: ";
+                    cin >> kiek;
+                }
+
+                pazymiuSkaicius[mokiniuSkaicius] = kiek;
+
+                for (int j = 0; j < kiek; j++) {
+                    int paz;
+                    cout << "Įveskite " << j + 1 << "-ąjį pažymį (nuo 1 iki 10): ";
+                    cin >> paz;
+
+                    while (paz < 1 || paz > 10) {
+                        cout << "Neteisingai. Įveskite skaičių nuo 1 iki 10: ";
+                        cin >> paz;
                     }
-                }
-                    while (pazymiuKiekis[mokiniuKiekis] < 0 ||
-                         pazymiuKiekis[mokiniuKiekis] > 10);
-
-                for (int j = 0; j < pazymiuKiekis[mokiniuKiekis]; j++)
-                {
-                    pazymiai[mokiniuKiekis][j] = ivestiPazymi();
+                    pazymiai[mokiniuSkaicius][j] = paz;
                 }
 
-                mokiniuKiekis++;
-                cout << "Mokinys pridetas." << endl;
+                mokiniuSkaicius++;
+                cout << "Mokinys pridėtas." << endl;
             }
         }
-        else if (pasirinkimas == 2)
-        {
-            if (mokiniuKiekis == 0)
-            {
-                cout << "Mokiniu sarasas tuscias." << endl;
-            }
-                else
-            {
-                for (int i = 0; i < mokiniuKiekis; i++)
-                {
-                    cout << i + 1 << ". " << vardai[i] << endl;
-                    cout << "Pazymiai: ";
-
-                    if (pazymiuKiekis[i] == 0)
-                    {
-                        cout << "Mokinys neturi pazymiu.";
-                    }
-                        else
-                    {
-                        for (int j = 0; j < pazymiuKiekis[i]; j++)
-                        {
-                            cout << pazymiai[i][j] << " ";
-                        }
-                    }
-
-                    cout << endl;
-                }
-            }
-        }
-        else if (pasirinkimas == 3)
-        {
-            int i = pasirinktiMokini();
-
-            if (i != -1)
-            {
-                cout << "Mokinio vardas: " << vardai[i] << endl;
-
-                if (pazymiuKiekis[i] == 0)
-                {
-                    cout << "Mokinys neturi pazymiu." << endl;
-                }
-                    else
-                {
-                    cout << "Pazymiai: ";
-
-                    for (int j = 0; j < pazymiuKiekis[i]; j++)
-                    {
+        else if (pasirinkimas == 2) {
+        // 2. Peržiūrėti visų mokinių pažymius
+        if (mokiniuSkaicius == 0) {
+            cout << "Nera ivestu mokiniu." << endl;
+        } else {
+            cout << "Visi mokiniai: " << endl;
+            for (int i = 0; i < mokiniuSkaicius; i++) {
+                cout << i + 1 << ". Mokinys: " << vardai[i] << "  Pažymiai: ";
+                if (pazymiuSkaicius[i] == 0) {
+                    cout << "Neturi pažymių";
+                } else {
+                    for (int j = 0; j < pazymiuSkaicius[i]; j++) {
                         cout << pazymiai[i][j] << " ";
                     }
-
-                    cout << endl;
                 }
+                cout << endl;
             }
         }
-            else if (pasirinkimas == 4)
-            {
-            int i = pasirinktiMokini();
+    }
+            else if (pasirinkimas == 3) {
+            // 3. Peržiūrėti konkretaus mokinio pažymius
+            if (mokiniuSkaicius == 0) {
+                cout << "Sąraše nėra mokinių." << endl;
+            } else {
+                int nr;
+                cout << "Įveskite mokinio numerį (nuo 1 iki " << mokiniuSkaicius << "): ";
+                cin >> nr;
 
-            if (i != -1)
-            {
-                if (pazymiuKiekis[i] == 0)
-                {
-                    cout << "Mokinys neturi pazymiu." << endl;
-                } else
-                {
-                    cout << "Pazymiai:" << endl;
+                while (nr < 1 || nr > mokiniuSkaicius) {
+                    cout << "Neteisingai. Įveskite skaičių nuo 1 iki " << mokiniuSkaicius << ": ";
+                    cin >> nr;
+                }
 
-                    for (int j = 0; j < pazymiuKiekis[i]; j++)
-                    {
-                        cout << j + 1 << ". " << pazymiai[i][j] << endl;
+                int indeksas = nr - 1;
+                cout << "Mokinys: " << vardai[indeksas] << " | Pažymiai: ";
+                if (pazymiuSkaicius[indeksas] == 0) {
+                    cout << "Neturi pažymių";
+                } else {
+                    for (int j = 0; j < pazymiuSkaicius[indeksas]; j++) {
+                        cout << pazymiai[indeksas][j] << " ";
                     }
-
+                }
+                cout << endl;
+            }
+        }
+                else if (pasirinkimas == 4) {
+                // 4. Atnaujinti pažymį
+                if (mokiniuSkaicius == 0) {
+                    cout << "Sąraše nėra mokinių." << endl;
+                } else {
                     int nr;
-                    cout << "Kurio pazymio numeri norite pakeisti? ";
+                    cout << "Įveskite mokinio numerį (nuo 1 iki " << mokiniuSkaicius << "): ";
                     cin >> nr;
 
-                    if (nr < 1 || nr > pazymiuKiekis[i])
-                    {
-                        cout << "Neteisingas numeris. Galima rinktis nuo 1 iki "
-                             << pazymiuKiekis[i] << "." << endl;
+                    while (nr < 1 || nr > mokiniuSkaicius) {
+                        cout << "Neteisingai. Įveskite skaičių nuo 1 iki " << mokiniuSkaicius << ": ";
+                        cin >> nr;
                     }
-                        else
-                    {
-                        pazymiai[i][nr - 1] = ivestiPazymi();
-                        cout << "Pazymys pakeistas." << endl;
-                    }
-                }
-            }
-        }
-            else if (pasirinkimas == 5)
-            {
-            if (mokiniuKiekis == 0)
-            {
-                cout << "Mokiniu sarasas tuscias." << endl;
-            }
-                else
-                {
-                for (int i = 0; i < mokiniuKiekis; i++)
-                {
-                    if (pazymiuKiekis[i] == 0)
-                    {
-                        cout << vardai[i] << " pazymiu vidurkio nera."
-                             << endl;
-                    }
-                        else
-                    {
-                        int suma = 0;
 
-                        for (int j = 0; j < pazymiuKiekis[i]; j++)
-                        {
-                            suma += pazymiai[i][j];
+                    int indeksas = nr - 1;
+                    if (pazymiuSkaicius[indeksas] == 0) {
+                        cout << "Mokinys neturi pažymių." << endl;
+                    } else {
+                        int pazNr;
+                        cout << "Kurį pažymį norite atnaujinti (nuo 1 iki " << pazymiuSkaicius[indeksas] << "): ";
+                        cin >> pazNr;
+
+                        while (pazNr < 1 || pazNr > pazymiuSkaicius[indeksas]) {
+                            cout << "Neteisingai. Įveskite skaičių nuo 1 iki " << pazymiuSkaicius[indeksas] << ": ";
+                            cin >> pazNr;
                         }
 
-                        double vidurkis =
-                            (double)suma / pazymiuKiekis[i];
+                        int naujasPaz;
+                        cout << "Įveskite naują pažymį (nuo 1 iki 10): ";
+                        cin >> naujasPaz;
 
-                        cout << fixed << setprecision(2);
-                        cout << vardai[i] << " vidurkis: "
-                             << vidurkis << endl;
+                        while (naujasPaz < 1 || naujasPaz > 10) {
+                            cout << "Neteisingai. Įveskite skaičių nuo 1 iki 10: ";
+                            cin >> naujasPaz;
+                        }
+
+                        pazymiai[indeksas][pazNr - 1] = naujasPaz;
+                        cout << "Pažymys atnaujintas." << endl;
                     }
                 }
-            }
-        }
-            else if (pasirinkimas == 6)
-            {
-            int i = pasirinktiMokini();
+            }       else if (pasirinkimas == 5) {
+                    // 5. Apskaičiuoti mokinio vidurkį
+                    if (mokiniuSkaicius == 0) {
+                        cout << "Sąraše nėra mokinių." << endl;
+                    } else {
+                        int nr;
+                        cout << "Įveskite mokinio numerį (nuo 1 iki " << mokiniuSkaicius << "): ";
+                        cin >> nr;
 
-            if (i != -1)
-            {
-                for (int j = i; j < mokiniuKiekis - 1; j++)
-                {
-                    vardai[j] = vardai[j + 1];
-                    pazymiuKiekis[j] = pazymiuKiekis[j + 1];
+                        while (nr < 1 || nr > mokiniuSkaicius) {
+                            cout << "Neteisingai. Įveskite skaičių nuo 1 iki " << mokiniuSkaicius << ": ";
+                            cin >> nr;
+                        }
 
-                    for (int k = 0; k < 10; k++)
-                    {
-                        pazymiai[j][k] = pazymiai[j + 1][k];
+                        int indeksas = nr - 1;
+                        if (pazymiuSkaicius[indeksas] == 0) {
+                            cout << "Mokinys neturi pažymių." << endl;
+                        } else {
+                            double suma = 0;
+                            for (int j = 0; j < pazymiuSkaicius[indeksas]; j++) {
+                                suma += pazymiai[indeksas][j];
+                            }
+                            double vidurkis = suma / pazymiuSkaicius[indeksas];
+
+                            // Du skaiciai po kablelio
+                            cout << fixed << setprecision(2);
+                            cout << "Mokinio " << vardai[indeksas] << " pažymių vidurkis: " << vidurkis << endl;
+                        }
                     }
+                }   else if (pasirinkimas == 6) {
+                    // 6. Pašalinti mokinį
+                    if (mokiniuSkaicius == 0) {
+                        cout << "Sąraše nėra mokinių." << endl;
+                    } else {
+                    int nr;
+                    cout << "Įveskite mokinio numerį kuri norite pasalinti (nuo 1 iki " << mokiniuSkaicius << "): ";
+                    cin >> nr;
+
+                    while (nr < 1 || nr > mokiniuSkaicius) {
+                        cout << "Neteisingai. Įveskite skaičių nuo 1 iki " << mokiniuSkaicius << ": ";
+                        cin >> nr;
+                    }
+
+                    int indeksas = nr - 1;
+
+                    // kad neliktu tarpu visi pasislenka i pasalinto mokinio
+                    for (int i = indeksas; i < mokiniuSkaicius - 1; i++) {
+                        vardai[i] = vardai[i + 1];
+                        pazymiuSkaicius[i] = pazymiuSkaicius[i + 1];
+                        for (int j = 0; j < max_pazymiai; j++) {
+                            pazymiai[i][j] = pazymiai[i + 1][j];
+                        }
+                    }
+
+                    mokiniuSkaicius--;
+                    cout << "Mokinys pasalintas." << endl;
+                }
+            }       else if (pasirinkimas == 7) {
+                    // 7. Išeiti
+                    cout << "Programa baigia darbą." << endl;
+
+                } else {
+                    cout << "Neteisingas pasirinkimas. Pasirinkite skaičių nuo 1 iki 7." << endl;
                 }
 
-                mokiniuKiekis--;
-                cout << "Mokinys pasalintas." << endl;
-            }
-        }
-            else if (pasirinkimas == 7)
-            {
-            cout << "Programa baigiama." << endl;
-            }
-             else
-             {
-            cout << "Neteisingas pasirinkimas. Rinkites nuo 1 iki 7."
-                 << endl;
-            }
+} while (pasirinkimas != 7);
 
-    }
-    while (pasirinkimas != 7);
-
-    return 0;
+return 0;
 }
